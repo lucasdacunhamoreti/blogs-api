@@ -49,7 +49,8 @@ const schemaNewPost = Joi.object({
         'any.required': MISSING_FIELD,
         'string.empty': MISSING_FIELD,
     }),
-    categoryIds: Joi.array().min(1).messages({
+    categoryIds: Joi.array().min(1).required().items(Joi.number())
+    .messages({
         'any.required': MISSING_FIELD,
         'array.min': MISSING_FIELD,
     }),
