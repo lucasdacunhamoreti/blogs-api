@@ -11,4 +11,9 @@ const newCategory = ({ name }) => {
     return categoryInsert;
 };
 
-module.exports = { validateBody, newCategory };
+const getCategories = () => {
+    const categories = Category.findAll();
+    return categories;
+};
+
+module.exports = { validateBody, newCategory, getCategories };

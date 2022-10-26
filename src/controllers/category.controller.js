@@ -11,4 +11,9 @@ const newCategory = async (req, res) => {
     return res.status(201).json(result);
 };
 
-module.exports = { newCategory };
+const getCategories = async (req, res) => {
+    const result = await categoryService.getCategories();
+    return res.status(200).json(result);
+};
+
+module.exports = { newCategory, getCategories };
