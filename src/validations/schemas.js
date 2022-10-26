@@ -40,4 +40,19 @@ const schemaNewCategory = Joi.object({
     }),
 });
 
-module.exports = { schemaUser, schemaNewUser, schemaNewCategory };
+const schemaNewPost = Joi.object({
+    title: Joi.string().required().messages({
+        'any.required': MISSING_FIELD,
+        'string.empty': MISSING_FIELD,
+    }),
+    content: Joi.string().required().messages({
+        'any.required': MISSING_FIELD,
+        'string.empty': MISSING_FIELD,
+    }),
+    categoryIds: Joi.array().min(1).messages({
+        'any.required': MISSING_FIELD,
+        'array.min': MISSING_FIELD,
+    }),
+});
+
+module.exports = { schemaUser, schemaNewUser, schemaNewCategory, schemaNewPost };
