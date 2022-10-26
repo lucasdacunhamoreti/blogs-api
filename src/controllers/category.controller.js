@@ -12,7 +12,7 @@ const newCategory = async (req, res) => {
 };
 
 const getCategories = async (req, res) => {
-    const result = await categoryService.getCategories();
+    const result = await categoryService.getCategories(req.user);
     return res.status(200).json(result);
 };
 

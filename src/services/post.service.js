@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const { BlogPost, Category, PostCategory } = require('../models');
+const { BlogPost, Category, PostCategory, User } = require('../models');
 const { validateNewPost } = require('../validations/validatePost');
 
 const config = require('../config/config');
@@ -43,4 +43,37 @@ const newPost = async ({ title, content, categoryIds }, { id }) => {
     }
 };
 
-module.exports = { validateBody, newPost };
+const getPosts = async ({ id }) => {
+    const post = await BlogPost.findAll({
+        where: {
+            id,
+        },
+        include: [
+            { model: User, as: 'user', where: { id }, attributes: { exclude: ['password'] } },
+            { model: Category, as: 'categories', through: { attributes: [] } },
+        ],
+    });
+    return post;
+};
+
+const getPostById = async (user, id) => {
+    const userId = user.id;
+    const post = await BlogPost.findOne({
+        where: {
+            id,
+        },
+        include: [
+            { 
+                model: User,
+                as: 'user',
+                where: { id: userId },
+                attributes: { exclude: ['password'] },
+            },
+            { model: Category, as: 'categories', through: { attributes: [] } },
+        ],
+    });
+
+    return post;
+};
+
+module.exports = { validateBody, newPost, getPosts, getPostById };
