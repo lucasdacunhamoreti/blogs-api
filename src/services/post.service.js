@@ -85,15 +85,13 @@ const updatePost = async ({ title, content }, id, userId) => {
     const { dataValues } = await BlogPost.findOne({
         where: { id }, attributes: ['userId'],
     });
-
-    if (!dataValues || userId.id !== dataValues.userId) {
+    if (!dataValues) return { code: 404, erro: 'Post not exist' };
+    if (userId.id !== dataValues.userId) {
         return { code: 401, erro: 'Unauthorized user' };
     }
 
-    const result = await BlogPost
+    await BlogPost
     .update({ title, content, updated: new Date() }, { where: { id } });
-
-    if (result[0] === 0) return { code: 404, erro: 'Post not exist' };
     
     const blogUpdated = await BlogPost.findByPk(id, {
         include: [{ 
@@ -106,6 +104,23 @@ const updatePost = async ({ title, content }, id, userId) => {
     return { code: 200, message: blogUpdated };
 };
 
+const deletePost = async (userId, id) => {
+    const getPost = await BlogPost.findOne({
+        where: { id }, attributes: ['userId'],
+    });
+    if (!getPost) return { code: 404, erro: 'Post does not exist' };
+
+    if (userId.id !== getPost.dataValues.userId) {
+        return { code: 401, erro: 'Unauthorized user' };
+    }
+
+    await BlogPost.destroy({
+        where: { id },
+    });
+
+    return { code: 204, message: '' };
+};
+
 module.exports = { 
-    validateBody, newPost, getPosts, getPostById, validateBodyUpdatePost, updatePost,
+    validateBody, newPost, getPosts, getPostById, validateBodyUpdatePost, updatePost, deletePost,
 };
