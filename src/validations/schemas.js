@@ -32,4 +32,12 @@ const schemaNewUser = Joi.object({
     image: Joi.string(),
 });
 
-module.exports = { schemaUser, schemaNewUser };
+const schemaNewCategory = Joi.object({
+    name: Joi.string().required()
+    .messages({
+        'any.required': '"name" is required',
+        'string.empty': '"name" is required',
+    }),
+});
+
+module.exports = { schemaUser, schemaNewUser, schemaNewCategory };
