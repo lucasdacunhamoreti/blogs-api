@@ -6,13 +6,13 @@ const validateBody = (body) => {
     return result;
 };
 
-const newCategory = ({ name }) => {
-    const categoryInsert = Category.create({ name });
+const newCategory = async ({ name }) => {
+    const categoryInsert = await Category.create({ name });
     return categoryInsert;
 };
 
-const getCategories = () => {
-    const categories = Category.findAll();
+const getCategories = async () => {
+    const categories = await Category.findAll();
     return categories;
 };
 

@@ -2,11 +2,14 @@ const authService = require('../services/auth.service');
 
 const validateToken = async (req, res, next) => {
     const { authorization } = req.headers;
-    const { user, code, message } = authService.validateToken(authorization);
-    if (code) {
-        return res.status(code).json({ message });
+    // const { data, code, message } = authService.validateToken(authorization);
+    const result = authService.validateToken(authorization);
+
+    if (result.code) {
+        return res.status(result.code).json({ message: result.message });
     }
-    req.user = user;
+
+    req.user = result;
 
     next();
 };

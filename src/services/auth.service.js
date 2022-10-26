@@ -26,6 +26,7 @@ const validateToken = (token) => {
         return { code: 401, message: 'Token not found' };
     }
     const user = jwtUtil.validateToken(token);
+    // console.log(user, 'AAAAA');
     return user;
 };
 
