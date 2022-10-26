@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 const { BlogPost, Category, PostCategory, User } = require('../models');
-const { validateNewPost } = require('../validations/validatePost');
+const { validateNewPost, validateUpdatePost } = require('../validations/validatePost');
 
 const config = require('../config/config');
 
@@ -9,6 +9,11 @@ const sequelize = new Sequelize(config[env]);
 
 const validateBody = (body) => {
     const result = validateNewPost(body);
+    return result;
+};
+
+const validateBodyUpdatePost = (body) => {
+    const result = validateUpdatePost(body);
     return result;
 };
 
@@ -76,4 +81,31 @@ const getPostById = async (user, id) => {
     return post;
 };
 
-module.exports = { validateBody, newPost, getPosts, getPostById };
+const updatePost = async ({ title, content }, id, userId) => {
+    const { dataValues } = await BlogPost.findOne({
+        where: { id }, attributes: ['userId'],
+    });
+
+    if (!dataValues || userId.id !== dataValues.userId) {
+        return { code: 401, erro: 'Unauthorized user' };
+    }
+
+    const result = await BlogPost
+    .update({ title, content, updated: new Date() }, { where: { id } });
+
+    if (result[0] === 0) return { code: 404, erro: 'Post not exist' };
+    
+    const blogUpdated = await BlogPost.findByPk(id, {
+        include: [{ 
+            model: User,
+            as: 'user',
+            where: { id: userId.id },
+            attributes: { exclude: ['password'] },
+        }, { model: Category, as: 'categories', through: { attributes: [] } }],
+    });
+    return { code: 200, message: blogUpdated };
+};
+
+module.exports = { 
+    validateBody, newPost, getPosts, getPostById, validateBodyUpdatePost, updatePost,
+};
