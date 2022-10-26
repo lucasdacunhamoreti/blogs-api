@@ -1,5 +1,5 @@
 const { User } = require('../models');
-const { validateNewUser } = require('../validations/validateNewUser');
+const { validateNewUser } = require('../validations/validateUser');
 const jwtUtil = require('../utils/jwt.util');
 
 const validateBody = (body) => {
@@ -8,8 +8,6 @@ const validateBody = (body) => {
 };
 
 const newUser = async ({ displayName, email, password, image }) => {
-    // const bodySnake = await snakeize(body);
-
     const user = await User.findOne({
         where: {
             email,
