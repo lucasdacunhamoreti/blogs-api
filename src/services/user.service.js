@@ -31,9 +31,7 @@ const getUsers = async () => {
         exclude: ['password'],
        },
     });
-
-    const result = users.map((item) => item.dataValues);
-    return result;
+    return users;
 };
 
 const getUser = async (id) => {
