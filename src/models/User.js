@@ -6,7 +6,7 @@ const User = (sequelize, Datatypes) => {
             primaryKey: true,
             autoIncrement:true
         },
-        display_name: Datatypes.STRING,
+        displayName: Datatypes.STRING,
         email: Datatypes.STRING,
         password: Datatypes.STRING,
         image: Datatypes.STRING,

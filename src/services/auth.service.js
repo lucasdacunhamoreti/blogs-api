@@ -21,4 +21,12 @@ const validateLogin = async (email, password) => {
     return { code: null, message: token };
 };
 
-module.exports = { validateBody, validateLogin };
+const validateToken = (token) => {
+    if (!token) {
+        return { code: 401, message: 'Token not found' };
+    }
+    const user = jwtUtil.validateToken(token);
+    return user;
+};
+
+module.exports = { validateBody, validateLogin, validateToken };
