@@ -1,7 +1,7 @@
 const authService = require('../services/auth.service');
 
 const login = async (req, res) => {
-    const { value, error } = await authService.validateBody(req.body);
+    const { value, error } = authService.validateBody(req.body);
 
     const { email, password } = value;
 
