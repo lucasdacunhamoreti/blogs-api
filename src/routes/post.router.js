@@ -8,5 +8,6 @@ router.post('/', authMiddleware.validateToken, postController.newPost);
 router.get('/', authMiddleware.validateToken, postController.getPosts);
 router.get('/:id', authMiddleware.validateToken, postController.getPostById);
 router.put('/:id', authMiddleware.validateToken, postController.updatePost);
+router.delete('/:id', authMiddleware.validateToken, postController.deletePost);
 
 module.exports = router;
