@@ -56,4 +56,17 @@ const schemaNewPost = Joi.object({
     }),
 });
 
-module.exports = { schemaUser, schemaNewUser, schemaNewCategory, schemaNewPost };
+const schemaUpdatePost = Joi.object({
+    title: Joi.string().required()
+    .messages({
+        'any.required': MISSING_FIELD,
+        'string.empty': MISSING_FIELD,
+    }),
+    content: Joi.string().required()
+    .messages({
+        'any.required': MISSING_FIELD,
+        'string.empty': MISSING_FIELD,
+    }),
+});
+
+module.exports = { schemaUser, schemaNewUser, schemaNewCategory, schemaNewPost, schemaUpdatePost };

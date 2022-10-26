@@ -28,4 +28,19 @@ const getPostById = async (req, res) => {
     return res.status(200).json(result);
 };
 
-module.exports = { newPost, getPosts, getPostById };
+const updatePost = async (req, res) => {
+    const { id } = req.params;
+    const userId = req.user;
+    const { error } = postService.validateBodyUpdatePost(req.body);
+
+    if (error) {
+        return res.status(400).json({ message: error.message });
+    }
+    const { code, erro, message } = await postService.updatePost(req.body, id, userId);
+    if (erro) {
+        return res.status(code).json({ message: erro });
+    }
+    return res.status(code).json(message);
+};
+
+module.exports = { newPost, getPosts, getPostById, updatePost };

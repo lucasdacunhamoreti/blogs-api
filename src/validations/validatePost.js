@@ -1,8 +1,13 @@
-const { schemaNewPost } = require('./schemas');
+const { schemaNewPost, schemaUpdatePost } = require('./schemas');
 
 const validateNewPost = (body) => {
     const result = schemaNewPost.validate(body);
     return result;
 };
 
-module.exports = { validateNewPost };
+const validateUpdatePost = (body) => {
+    const result = schemaUpdatePost.validate(body);
+    return result;
+};
+
+module.exports = { validateNewPost, validateUpdatePost };
