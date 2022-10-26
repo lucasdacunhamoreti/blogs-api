@@ -24,8 +24,8 @@ const verifyCategoryId = async (categoryIds) => {
 };
 
 const newPost = async ({ title, content, categoryIds }, { id }) => {
-    const verify = await verifyCategoryId(categoryIds);
-    if (!verify) return { code: 400, erro: 'one or more "categoryIds" not found' };
+    const verificationCategoryId = await verifyCategoryId(categoryIds);
+    if (!verificationCategoryId) return { code: 400, erro: 'one or more "categoryIds" not found' };
     try {
         const result = await sequelize.transaction(async (t) => {
             const post = await BlogPost.create({ 
