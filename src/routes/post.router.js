@@ -4,11 +4,13 @@ const authMiddleware = require('../middlewares/auth.middleware');
 
 const router = express.Router();
 
-router.get('/search', authMiddleware.validateToken, postController.getPostsByQuery);
-router.post('/', authMiddleware.validateToken, postController.newPost);
-router.get('/', authMiddleware.validateToken, postController.getPosts);
-router.get('/:id', authMiddleware.validateToken, postController.getPostById);
-router.put('/:id', authMiddleware.validateToken, postController.updatePost);
-router.delete('/:id', authMiddleware.validateToken, postController.deletePost);
+router.use(authMiddleware.validateToken);
+
+router.get('/search', postController.getPostsByQuery);
+router.post('/', postController.newPost);
+router.get('/', postController.getPosts);
+router.get('/:id', postController.getPostById);
+router.put('/:id', postController.updatePost);
+router.delete('/:id', postController.deletePost);
 
 module.exports = router;
