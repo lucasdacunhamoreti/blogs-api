@@ -2,7 +2,7 @@ const postService = require('../services/post.service');
 
 const newPost = async (req, res) => {
     const userId = req.user;
-    const { error } = postService.validateBody(req.body);
+    const { error } = postService.validateBodyCreatePost(req.body);
 
     if (error) {
         return res.status(400).json({ message: error.message });

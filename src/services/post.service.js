@@ -9,7 +9,7 @@ const config = require('../config/config');
 const env = process.env.NODE_ENV || 'development';
 const sequelize = new Sequelize(config[env]);
 
-const validateBody = (body) => {
+const validateBodyCreatePost = (body) => {
     const result = validateNewPost(body);
     return result;
 };
@@ -51,29 +51,22 @@ const newPost = async ({ title, content, categoryIds }, { id }) => {
 };
 
 const getPosts = async ({ id }) => {
-    const post = await BlogPost.findAll({
-        where: {
-            id,
-        },
+    const posts = await BlogPost.findAll({
         include: [
             { model: User, as: 'user', where: { id }, attributes: { exclude: ['password'] } },
             { model: Category, as: 'categories', through: { attributes: [] } },
         ],
     });
-    return post;
+    return posts;
 };
 
 const getPostById = async (user, id) => {
-    const userId = user.id;
-    const post = await BlogPost.findOne({
-        where: {
-            id,
-        },
+    const post = await BlogPost.findByPk(id, {
         include: [
             { 
                 model: User,
                 as: 'user',
-                where: { id: userId },
+                where: { id: user.id },
                 attributes: { exclude: ['password'] },
             },
             { model: Category, as: 'categories', through: { attributes: [] } },
@@ -83,12 +76,12 @@ const getPostById = async (user, id) => {
     return post;
 };
 
-const updatePost = async ({ title, content }, id, userId) => {
+const updatePost = async ({ title, content }, id, user) => {
     const { dataValues } = await BlogPost.findOne({
         where: { id }, attributes: ['userId'],
     });
     if (!dataValues) return { code: 404, erro: 'Post not exist' };
-    if (userId.id !== dataValues.userId) {
+    if (user.id !== dataValues.userId) {
         return { code: 401, erro: 'Unauthorized user' };
     }
 
@@ -99,20 +92,20 @@ const updatePost = async ({ title, content }, id, userId) => {
         include: [{ 
             model: User,
             as: 'user',
-            where: { id: userId.id },
+            where: { id: user.id },
             attributes: { exclude: ['password'] },
         }, { model: Category, as: 'categories', through: { attributes: [] } }],
     });
     return { code: 200, message: blogUpdated };
 };
 
-const deletePost = async (userId, id) => {
+const deletePost = async (user, id) => {
     const getPost = await BlogPost.findOne({
         where: { id }, attributes: ['userId'],
     });
     if (!getPost) return { code: 404, erro: 'Post does not exist' };
 
-    if (userId.id !== getPost.dataValues.userId) {
+    if (user.id !== getPost.dataValues.userId) {
         return { code: 401, erro: 'Unauthorized user' };
     }
 
@@ -141,7 +134,7 @@ const getAllPostsByQuery = async (where, query, userId) => {
     return result;
 };
 
-const getAllPostsWithoutQuery = async (userId) => {
+const getPostsWithoutQuery = async (userId) => {
     const allPosts = await BlogPost.findAll({
         include: [
             { 
@@ -169,14 +162,14 @@ const getPostsByQuery = async (query, user) => {
         return searchByContent;
     } 
     if (!query) {
-        const searchWithoutQuery = await getAllPostsWithoutQuery(user.id);
+        const searchWithoutQuery = await getPostsWithoutQuery(user.id);
         return searchWithoutQuery;
     }
     return [];
 };
 
 module.exports = { 
-    validateBody,
+    validateBodyCreatePost,
     newPost,
     getPosts,
     getPostById,
