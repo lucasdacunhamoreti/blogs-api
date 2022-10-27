@@ -2,6 +2,8 @@ const Sequelize = require('sequelize');
 const { BlogPost, Category, PostCategory, User } = require('../models');
 const { validateNewPost, validateUpdatePost } = require('../validations/validatePost');
 
+const { Op } = Sequelize; 
+
 const config = require('../config/config');
 
 const env = process.env.NODE_ENV || 'development';
@@ -121,6 +123,65 @@ const deletePost = async (userId, id) => {
     return { code: 204, message: '' };
 };
 
+const getAllPostsByQuery = async (where, query, userId) => {
+    const result = await BlogPost.findAll(
+        {
+            where: { [where]: { [Op.like]: query } },
+            include: [
+                { 
+                    model: User,
+                    as: 'user',
+                    where: { id: userId },
+                    attributes: { exclude: ['password'] },
+                },
+                { model: Category, as: 'categories', through: { attributes: [] } },
+            ],
+        },
+    );
+    return result;
+};
+
+const getAllPostsWithoutQuery = async (userId) => {
+    const allPosts = await BlogPost.findAll({
+        include: [
+            { 
+                model: User,
+                as: 'user',
+                where: { id: userId },
+                attributes: { exclude: ['password'] },
+            },
+            { model: Category, as: 'categories', through: { attributes: [] } },
+        ],
+    });
+    return allPosts;
+};
+
+const getPostsByQuery = async (query, user) => {
+    const querySearch = query.length ? `%${query}%` : null;
+
+    const searchByTitle = await getAllPostsByQuery('title', querySearch, user.id);
+    const searchByContent = await getAllPostsByQuery('content', querySearch, user.id);
+
+    if (searchByTitle.length) {
+        return searchByTitle;
+    } 
+    if (searchByContent.length) {
+        return searchByContent;
+    } 
+    if (!query) {
+        const searchWithoutQuery = await getAllPostsWithoutQuery(user.id);
+        return searchWithoutQuery;
+    }
+    return [];
+};
+
 module.exports = { 
-    validateBody, newPost, getPosts, getPostById, validateBodyUpdatePost, updatePost, deletePost,
+    validateBody,
+    newPost,
+    getPosts,
+    getPostById,
+    validateBodyUpdatePost,
+    updatePost,
+    deletePost,
+    getPostsByQuery,
 };

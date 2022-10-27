@@ -4,6 +4,7 @@ const authMiddleware = require('../middlewares/auth.middleware');
 
 const router = express.Router();
 
+router.get('/search', authMiddleware.validateToken, postController.getPostsByQuery);
 router.post('/', authMiddleware.validateToken, postController.newPost);
 router.get('/', authMiddleware.validateToken, postController.getPosts);
 router.get('/:id', authMiddleware.validateToken, postController.getPostById);
