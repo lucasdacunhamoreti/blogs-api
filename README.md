@@ -1,14 +1,16 @@
-# Projeto BlogsAPI
+# BlogsAPI
+> Esta aplicação consiste na construção de um CRUD de blogs. 
 
-Olá. Bem vindo ao projeto BlogsAPI. Esta aplicação consiste na construção de um CRUD de Blogs utilizando as tecnologias aprendidas durante o curso da Trybe.
+## 💻 Projeto
 
-# Funcionamento
 A aplicação possui a funcionalidade do usuário criar uma conta, fazer login pois em algumas rotas é necessário validar se o usuário está realmente logado para ter acesso, como criação, listagem, edição, exclusão. Para isso é gerado um token a cada vez que o usuário loga na aplicação. Este token é usado para ter acesso a outras rotas.
 
-Na aplicação é possível criar um novo usuário, criar posts para seu blog, também com a opção de editar, excluir, e listar. É possível criar novas categorias a serem referenciadas nos blogs.
+## 📈 Diagrama de entidade e relacionamento
+![der](der.png)
 
+## 🚀 Tecnologias
+> Este projeto foi desenvolvido com as seguintes tecnologias:
 
-# Tecnologias utilizadas
 - NodeJs
 - ExpressJS
 - MSC
@@ -18,5 +20,17 @@ Na aplicação é possível criar um novo usuário, criar posts para seu blog, t
 - JOI
 - ExpressAsyncErrors
 
-# Diagrama de entidade e relacionamento
-![der](der.png)
+## 📌 Habilidades
+
+> Neste projeto, desenvolvi as seguintes habilidades:
+
+- Manipulação de dados utilizando Sequelize;
+- Relacionamentos entre tabelas;
+- Rotas autenticadas;
+
+## 💬 Contatos
+
+<div align="center" style="display: inline_block">
+  <a href="https://www.linkedin.com/in/lucas-da-cunha-moreti/" target="_blank"><img height="28rem" src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"></a> 
+  <a href = "mailto:lucasdacunha00@gmail.com"><img height="28rem" src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white" target="_blank"></a>
+</div>
